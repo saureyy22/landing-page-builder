@@ -1,0 +1,77 @@
+.manual-save-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+  justify-content: center;
+}
+
+.manual-save-button:hover:not(:disabled) {
+  background: #0052a3;
+  transform: translateY(-1px);
+}
+
+.manual-save-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.manual-save-button:disabled {
+  background: #8b949e;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.manual-save-button__icon,
+.manual-save-button__spinner {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.manual-save-button__spinner {
+  animation: spin 1s linear infinite;
+}
+
+/* Status-specific styles */
+.manual-save-button--saving {
+  background: #ffa500;
+}
+
+.manual-save-button--saved {
+  background: #28a745;
+}
+
+.manual-save-button--error {
+  background: #dc3545;
+}
+
+.manual-save-button--error:hover:not(:disabled) {
+  background: #c82333;
+}
+
+/* Animations */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .manual-save-button {
+    padding: 6px 12px;
+    font-size: 13px;
+    min-width: 70px;
+  }
+}

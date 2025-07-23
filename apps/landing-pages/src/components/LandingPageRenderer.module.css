@@ -1,0 +1,10 @@
+.container {
+  width: 100%;
+}
+
+.empty {
+  padding: 4rem 2rem;
+  text-align: center;
+  color: #666;
+  font-size: 1.125rem;
+}

@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "jsx": "react-jsx",
+    "lib": ["DOM", "DOM.Iterable", "ES2020"],
+    "baseUrl": ".",
+    "paths": {
+      "@contentful-landing-page-builder/shared": ["../../packages/shared/src"],
+      "@contentful-landing-page-builder/shared/*": ["../../packages/shared/src/*"]
+    }
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

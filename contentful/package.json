@@ -1,0 +1,13 @@
+{
+  "name": "contentful-setup",
+  "version": "1.0.0",
+  "description": "Contentful setup scripts and content types",
+  "private": true,
+  "scripts": {
+    "deploy-content-type": "node scripts/deploy-content-type.js"
+  },
+  "dependencies": {
+    "contentful-management": "^11.0.0",
+    "dotenv": "^16.0.0"
+  }
+}

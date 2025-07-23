@@ -1,0 +1,119 @@
+.component-sidebar {
+  width: 280px;
+  background: #f8f9fa;
+  border-right: 1px solid #e9ecef;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.sidebar-header {
+  padding: 20px;
+  border-bottom: 1px solid #e9ecef;
+  background: white;
+}
+
+.sidebar-header h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #212529;
+}
+
+.sidebar-header p {
+  margin: 0;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.sidebar-content {
+  padding: 16px;
+  flex: 1;
+}
+
+.draggable-component {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+  cursor: grab;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  user-select: none;
+}
+
+.draggable-component:hover {
+  border-color: #007bff;
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.draggable-component:active {
+  cursor: grabbing;
+}
+
+.draggable-component.dragging {
+  opacity: 0.5;
+  transform: rotate(5deg);
+  cursor: grabbing;
+}
+
+.component-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  border-radius: 6px;
+}
+
+.component-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.component-label {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #212529;
+}
+
+.component-description {
+  margin: 0;
+  font-size: 12px;
+  color: #6c757d;
+  line-height: 1.4;
+}
+
+/* Focus styles for accessibility */
+.draggable-component:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .component-sidebar {
+    width: 240px;
+  }
+  
+  .sidebar-header {
+    padding: 16px;
+  }
+  
+  .sidebar-content {
+    padding: 12px;
+  }
+  
+  .draggable-component {
+    padding: 12px;
+  }
+}

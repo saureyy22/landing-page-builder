@@ -1,0 +1,96 @@
+.test-controls {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+  background-color: #f8f9fa;
+}
+
+.test-controls h3 {
+  margin: 0 0 1rem 0;
+  color: #495057;
+  font-size: 1rem;
+}
+
+.control-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.test-button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.15s ease-in-out;
+}
+
+.test-button.add {
+  background-color: #28a745;
+  color: white;
+  border-color: #28a745;
+}
+
+.test-button.add:hover:not(:disabled) {
+  background-color: #218838;
+  border-color: #1e7e34;
+}
+
+.test-button.remove {
+  background-color: #dc3545;
+  color: white;
+  border-color: #dc3545;
+}
+
+.test-button.remove:hover:not(:disabled) {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+.test-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}.tes
+t-button.auto-save {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.test-button.auto-save:hover:not(:disabled) {
+  background-color: #0056b3;
+  border-color: #004085;
+}
+
+.test-button.manual-save {
+  background-color: #6c757d;
+  color: white;
+  border-color: #6c757d;
+}
+
+.test-button.manual-save:hover:not(:disabled) {
+  background-color: #545b62;
+  border-color: #4e555b;
+}
+
+.save-status-info {
+  padding: 0.75rem;
+  background-color: #e9ecef;
+  border-radius: 0.375rem;
+  border: 1px solid #ced4da;
+}
+
+.save-status-info p {
+  margin: 0.25rem 0;
+  font-size: 0.875rem;
+  color: #495057;
+}
+
+.save-status-info .error {
+  color: #dc3545;
+  font-weight: 500;
+}

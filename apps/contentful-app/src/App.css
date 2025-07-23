@@ -1,0 +1,154 @@
+.app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.app-header {
+  background-color: #f8f9fa;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #e9ecef;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app-header h1 {
+  margin: 0;
+  color: #212529;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.header-status {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.875rem;
+}
+
+.status-dirty {
+  color: #dc3545;
+  font-weight: 500;
+}
+
+.status-saving {
+  color: #007bff;
+  font-weight: 500;
+}
+
+.status-saved {
+  color: #28a745;
+  font-weight: 500;
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.builder-container {
+  flex: 1;
+  display: flex;
+  height: 100%;
+  background-color: #ffffff;
+}
+
+/* Fullscreen styles for Contentful App */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  height: 100vh;
+}
+.builder-canvas-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  margin-right: 400px; /* Make room for ComponentEditor */
+}
+
+.canvas-placeholder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 2rem;
+}
+
+.debug-info {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 0.375rem;
+  border: 1px solid #e9ecef;
+}
+
+.debug-info p {
+  margin: 0.5rem 0;
+  font-size: 0.875rem;
+  color: #495057;
+}
+
+.component-list {
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.component-list h4 {
+  margin: 0 0 0.5rem 0;
+  color: #495057;
+  font-size: 0.875rem;
+}
+
+.component-list ul {
+  margin: 0;
+  padding-left: 1.5rem;
+  list-style-type: disc;
+}
+
+.component-list li {
+  margin: 0.25rem 0;
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.debug-panel {
+  position: fixed;
+  bottom: 20px;
+  right: 420px; /* Adjusted to not overlap with ComponentEditor */
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-width: 300px;
+  z-index: 1000;
+}
+
+.debug-panel .debug-info {
+  margin-top: 1rem;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+}

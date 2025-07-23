@@ -1,0 +1,104 @@
+name: Lighthouse CI
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'apps/landing-pages/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'apps/landing-pages/**'
+
+jobs:
+  lighthouse-ci:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: 'apps/landing-pages/package-lock.json'
+          
+      - name: Install dependencies
+        run: |
+          cd apps/landing-pages
+          npm ci
+          
+      - name: Build application
+        run: |
+          cd apps/landing-pages
+          npm run build
+        env:
+          CONTENTFUL_SPACE_ID: ${{ secrets.CONTENTFUL_SPACE_ID }}
+          CONTENTFUL_ACCESS_TOKEN: ${{ secrets.CONTENTFUL_ACCESS_TOKEN }}
+          CONTENTFUL_PREVIEW_ACCESS_TOKEN: ${{ secrets.CONTENTFUL_PREVIEW_ACCESS_TOKEN }}
+          CONTENTFUL_MANAGEMENT_TOKEN: ${{ secrets.CONTENTFUL_MANAGEMENT_TOKEN }}
+          
+      - name: Run performance analysis
+        run: |
+          cd apps/landing-pages
+          npm run perf
+          
+      - name: Run Lighthouse CI
+        run: |
+          cd apps/landing-pages
+          npm run lighthouse
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          
+      - name: Upload Lighthouse results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-results
+          path: |
+            apps/landing-pages/.lighthouseci/
+            apps/landing-pages/performance-report.json
+          retention-days: 30
+          
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            try {
+              const reportPath = path.join('apps/landing-pages', 'performance-report.json');
+              if (fs.existsSync(reportPath)) {
+                const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+                
+                let comment = '## 🚀 Performance Report\n\n';
+                comment += `**Build Status:** ${report.passed ? '✅ Passed' : '❌ Failed'}\n`;
+                comment += `**Total Bundle Size:** ${(report.totalSize / 1024).toFixed(2)} KB\n\n`;
+                
+                if (report.violations.length > 0) {
+                  comment += '### ⚠️ Performance Budget Violations:\n';
+                  report.violations.forEach(violation => {
+                    comment += `- ${violation}\n`;
+                  });
+                  comment += '\n';
+                }
+                
+                comment += '### 💡 Recommendations:\n';
+                comment += '- Run `npm run analyze` to see detailed bundle analysis\n';
+                comment += '- Consider code splitting for large components\n';
+                comment += '- Review and optimize large dependencies\n';
+                
+                github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: comment
+                });
+              }
+            } catch (error) {
+              console.log('Could not read performance report:', error.message);
+            }

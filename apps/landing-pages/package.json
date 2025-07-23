@@ -1,0 +1,50 @@
+{
+  "name": "@contentful-landing-page-builder/landing-pages",
+  "version": "1.0.0",
+  "description": "Next.js frontend for rendering landing pages",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "build:analyze": "ANALYZE=true next build",
+    "build:performance": "npm run build && node scripts/build-performance.js",
+    "start": "next start",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit",
+    "analyze": "npm run build:analyze && npx serve .next/analyze",
+    "perf": "node scripts/build-performance.js",
+    "lighthouse": "lhci autorun",
+    "lighthouse:ci": "npm run build && npm run lighthouse",
+    "lighthouse:local": "lhci autorun --config=./lighthouserc.local.js",
+    "web-vitals": "node scripts/web-vitals-monitor.js",
+    "test:performance": "npm run build && npm run web-vitals",
+    "dashboard": "node scripts/performance-dashboard.js",
+    "test:all": "npm run build:performance && npm run web-vitals && npm run dashboard",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@contentful-landing-page-builder/shared": "*",
+    "contentful": "^10.0.0",
+    "next": "^14.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "web-vitals": "^3.5.2"
+  },
+  "devDependencies": {
+    "@lhci/cli": "^0.12.0",
+    "@testing-library/jest-dom": "^6.0.0",
+    "@testing-library/react": "^14.0.0",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@vitest/ui": "^1.0.0",
+    "critters": "^0.0.25",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^14.0.0",
+    "jsdom": "^23.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0",
+    "webpack-bundle-analyzer": "^4.9.0"
+  }
+}

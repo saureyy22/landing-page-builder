@@ -1,0 +1,28 @@
+{
+  "name": "contentful-landing-page-builder",
+  "version": "1.0.0",
+  "description": "A fullstack landing page builder system that integrates with Contentful CMS",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "dev": "npm run dev --workspaces",
+    "test": "npm run test --workspaces",
+    "lint": "npm run lint --workspaces",
+    "type-check": "npm run type-check --workspaces",
+    "deploy": "bash scripts/deploy.sh",
+    "deploy:win": "powershell -ExecutionPolicy Bypass -File scripts/deploy.ps1",
+    "pre-deploy": "npm run type-check && npm run build && npm run lint"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}

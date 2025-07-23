@@ -46,3 +46,100 @@ coverage/
 # Temporary folders
 tmp/
 temp/
+
+# Kiro Files
+.kiro/
+*.kiro-*
+kiro-cache/
+kiro-temp/
+
+# Credentials and Keys
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*.der
+id_rsa*
+id_dsa*
+*.gpg
+*.asc
+
+# Configuration Files with Secrets
+config/secrets.json
+secrets.yaml
+credentials.json
+auth.json
+.aws/credentials
+.ssh/config
+
+# Development Artifacts
+*.backup
+*.bak
+*.tmp
+.cache/
+.temp/
+
+# Cache directories and files
+.next/cache/
+.next/static/
+.next/server/
+.nuxt/
+.cache/
+cache/
+.parcel-cache/
+.vite/
+.turbo/
+.webpack/
+.rollup.cache/
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+.nyc_output/
+.eslintcache
+.stylelintcache
+.tsbuildinfo
+*.tsbuildinfo
+
+# Build outputs and artifacts
+out/
+build/
+dist/
+.output/
+.vercel/
+.netlify/
+.firebase/
+.serverless/
+.fusebox/
+.dynamodb/
+.tern-port
+
+# Package manager files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.pnpm-debug.log*
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# Testing
+coverage/
+.nyc_output/
+junit.xml
+test-results/
+playwright-report/
+test-results.xml
+
+# Misc
+*.orig
+*.rej
+*~
+.#*
+\#*#
+.*.swp
+.*.swo

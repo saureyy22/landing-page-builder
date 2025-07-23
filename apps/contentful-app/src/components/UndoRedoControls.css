@@ -1,0 +1,123 @@
+.undo-redo-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.undo-redo-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.undo-button,
+.redo-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 70px;
+  justify-content: center;
+}
+
+.undo-button:hover:not(:disabled),
+.redo-button:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #9ca3af;
+  color: #111827;
+}
+
+.undo-button:active:not(:disabled),
+.redo-button:active:not(:disabled) {
+  background: #f3f4f6;
+  border-color: #6b7280;
+  transform: translateY(1px);
+}
+
+.undo-button:disabled,
+.redo-button:disabled {
+  background: #f9fafb;
+  border-color: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.undo-button svg,
+.redo-button svg {
+  flex-shrink: 0;
+}
+
+.history-indicator {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  border-left: 1px solid #e5e7eb;
+  margin-left: 4px;
+}
+
+.history-position {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Focus styles for accessibility */
+.undo-button:focus,
+.redo-button:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .undo-button,
+  .redo-button {
+    padding: 4px 8px;
+    font-size: 12px;
+    min-width: 60px;
+  }
+  
+  .undo-button svg,
+  .redo-button svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .history-position {
+    font-size: 11px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .undo-button,
+  .redo-button {
+    border-width: 2px;
+  }
+  
+  .undo-button:disabled,
+  .redo-button:disabled {
+    opacity: 0.5;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .undo-button,
+  .redo-button {
+    transition: none;
+  }
+  
+  .undo-button:active:not(:disabled),
+  .redo-button:active:not(:disabled) {
+    transform: none;
+  }
+}
