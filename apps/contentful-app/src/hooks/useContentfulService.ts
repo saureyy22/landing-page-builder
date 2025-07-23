@@ -184,8 +184,9 @@ export const useContentfulAppContext = () => {
           return storedEntryId;
         }
 
-        // Default entry ID for development
-        return 'default-entry-id';
+        // For development, try to get a valid entry ID or return null
+        // This will prevent 404 errors with non-existent entries
+        return null;
       } catch (error) {
         console.error('Error getting entry ID from context:', error);
         return null;
