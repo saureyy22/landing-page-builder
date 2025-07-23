@@ -1,7 +1,4 @@
-import { createClient } from 'contentful';
-
-// Environment variables validation
-import 'dotenv/config'; 
+import { createClient } from 'contentful'; 
 const requiredEnvVars = {
     spaceId: process.env.CONTENTFUL_SPACE_ID,
     accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
