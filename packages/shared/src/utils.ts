@@ -21,13 +21,16 @@ export function createDefaultLayoutConfig(): LayoutConfig {
 /**
  * Validates a layout configuration structure
  */
-export function validateLayoutConfig(config: any): config is LayoutConfig {
+export function validateLayoutConfig(config: unknown): config is LayoutConfig {
   return (
     config != null &&
     typeof config === 'object' &&
-    Array.isArray(config.components) &&
-    typeof config.version === 'string' &&
-    typeof config.lastModified === 'string'
+    'components' in config &&
+    'version' in config &&
+    'lastModified' in config &&
+    Array.isArray((config as LayoutConfig).components) &&
+    typeof (config as LayoutConfig).version === 'string' &&
+    typeof (config as LayoutConfig).lastModified === 'string'
   );
 }
 

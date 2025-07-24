@@ -18,8 +18,13 @@
     "pre-deploy": "npm run type-check && npm run build && npm run lint"
   },
   "devDependencies": {
+    "@eslint/js": "^9.31.0",
+    "@types/node": "^20.0.0",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.3.0",
     "typescript": "^5.0.0",
-    "@types/node": "^20.0.0"
+    "typescript-eslint": "^8.38.0"
   },
   "engines": {
     "node": ">=18.0.0",

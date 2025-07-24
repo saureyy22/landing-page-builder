@@ -4,7 +4,8 @@
   "description": "Contentful setup scripts and content types",
   "private": true,
   "scripts": {
-    "deploy-content-type": "node scripts/deploy-content-type.js"
+    "deploy-content-type": "node scripts/deploy-content-type.js",
+    "lint": "eslint ."
   },
   "dependencies": {
     "contentful-management": "^11.0.0",
