@@ -200,6 +200,7 @@ export default async function LandingPage({ params, searchParams }: LandingPageP
                       }}>
                         <p>{image.fields?.title || `Image ${imgIndex + 1}`}</p>
                         {image.fields?.file?.url && (
+                          // eslint-disable-next-line @next/next/no-img-element
                           <img
                             src={image.fields.file.url}
                             alt={image.fields?.title || `Grid image ${imgIndex + 1}`}
@@ -256,7 +257,7 @@ export default async function LandingPage({ params, searchParams }: LandingPageP
               textAlign: 'center'
             }}>
               <h3>No Components Found</h3>
-              <p>This landing page doesn't have any components configured yet.</p>
+              <p>This landing page does not have any components configured yet.</p>
             </div>
           )}
         </div>
