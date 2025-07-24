@@ -153,32 +153,46 @@ export default async function LandingPage({ params, searchParams }: LandingPageP
 
     console.log('Landing page request - slug:', params.slug, 'entryId:', searchParams?.entryId);
 
-    // Check if this is a preview request with entryId
-    if (searchParams?.entryId) {
-      console.log('Preview mode: fetching by entryId', searchParams.entryId);
-      try {
-        landingPage = await getLandingPageById(searchParams.entryId, true);
-        console.log('Preview fetch result:', landingPage ? 'success' : 'not found');
-      } catch (error) {
-        console.error('Preview fetch failed:', error);
-        landingPage = null;
+    // Check if Contentful is configured
+    const isContentfulConfigured = process.env.CONTENTFUL_SPACE_ID && process.env.CONTENTFUL_ACCESS_TOKEN;
+    
+    if (!isContentfulConfigured) {
+      console.warn('Contentful not configured, using mock data');
+      // Use mock data when Contentful is not configured
+      if (params.slug === 'page-1' || params.slug === 'page-2') {
+        landingPage = getMockLandingPageBySlug(params.slug);
+      } else {
+        // Create a generic mock page for any slug when in preview mode
+        landingPage = getMockLandingPageBySlug(params.slug);
       }
     } else {
-      // Normal mode: fetch by slug
-      console.log('Normal mode: fetching by slug', params.slug);
-      try {
-        landingPage = await getLandingPageBySlug(params.slug);
-        console.log('Slug fetch result:', landingPage ? 'success' : 'not found');
-      } catch (error) {
-        console.error('Slug fetch failed:', error);
-        landingPage = null;
+      // Check if this is a preview request with entryId
+      if (searchParams?.entryId) {
+        console.log('Preview mode: fetching by entryId', searchParams.entryId);
+        try {
+          landingPage = await getLandingPageById(searchParams.entryId, true);
+          console.log('Preview fetch result:', landingPage ? 'success' : 'not found');
+        } catch (error) {
+          console.error('Preview fetch failed:', error);
+          landingPage = null;
+        }
+      } else {
+        // Normal mode: fetch by slug
+        console.log('Normal mode: fetching by slug', params.slug);
+        try {
+          landingPage = await getLandingPageBySlug(params.slug);
+          console.log('Slug fetch result:', landingPage ? 'success' : 'not found');
+        } catch (error) {
+          console.error('Slug fetch failed:', error);
+          landingPage = null;
+        }
       }
-    }
 
-    // Fallback to mock data if Contentful is not configured
-    if (!landingPage && (params.slug === 'page-1' || params.slug === 'page-2')) {
-      console.log('Using mock data for slug:', params.slug);
-      landingPage = getMockLandingPageBySlug(params.slug);
+      // Fallback to mock data if Contentful fetch failed
+      if (!landingPage && (params.slug === 'page-1' || params.slug === 'page-2')) {
+        console.log('Using mock data fallback for slug:', params.slug);
+        landingPage = getMockLandingPageBySlug(params.slug);
+      }
     }
 
     if (!landingPage) {
