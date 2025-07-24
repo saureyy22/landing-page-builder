@@ -17,7 +17,7 @@ export class PreviewService {
 
   constructor() {
     this.config = {
-      baseUrl: process.env.REACT_APP_PREVIEW_URL || 'http://localhost:3001',
+      baseUrl: process.env.REACT_APP_PREVIEW_URL || 'https://landing-page-builder-landing-pages.vercel.app',
       isProduction: process.env.NODE_ENV === 'production',
       deploymentStatus: 'unknown',
     };
