@@ -1,6 +1,6 @@
 import { LayoutConfig } from '@contentful-landing-page-builder/shared';
-import { 
-  updateLandingPageEntryWithRetry, 
+import {
+  updateLandingPageEntryWithRetry,
   getLandingPageEntry,
   getOrCreateLandingPageEntry,
   validateAuthentication,
@@ -93,6 +93,7 @@ export class ContentfulService {
         slug: this.currentEntryId!,
         layoutConfig: {
           components: [],
+          version: '1.0.0',
           lastModified: new Date().toISOString()
         }
       });
@@ -135,10 +136,10 @@ export class ContentfulService {
       }
 
       const entry = await getLandingPageEntry(this.currentEntryId!);
-      
+
       // Extract layout config from entry
       const layoutConfig = entry.fields.layoutConfig?.['en-US'];
-      
+
       if (!layoutConfig) {
         console.warn('No layout configuration found in entry');
         return null;
@@ -164,6 +165,7 @@ export class ContentfulService {
         slug: this.currentEntryId!,
         layoutConfig: {
           components: [],
+          version: '1.0.0',
           lastModified: new Date().toISOString()
         }
       });
@@ -182,7 +184,7 @@ export class ContentfulService {
       }
 
       const entry = await getLandingPageEntry(this.currentEntryId!);
-      
+
       return {
         version: entry.sys.version,
         updatedAt: entry.sys.updatedAt,
@@ -200,7 +202,7 @@ export class ContentfulService {
       if (!metadata) {
         return false;
       }
-      
+
       return metadata.version > lastKnownVersion;
     } catch (error) {
       console.error('Failed to check for external changes:', error);
