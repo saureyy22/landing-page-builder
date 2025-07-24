@@ -78,18 +78,23 @@ export const getLandingPageById = async (entryId: string, preview = true) => {
             return null;
         }
 
+        console.log('Fetching entry by ID:', entryId, 'using preview client:', !!contentfulPreviewClient);
+        
         const entry = await client.getEntry(entryId);
+        
+        console.log('Entry fetched successfully:', entry.sys.id, 'content type:', entry.sys.contentType.sys.id);
         
         // Verify it's a landing page content type
         if (entry.sys.contentType.sys.id !== 'landingPage') {
-            console.warn('Entry is not a landing page');
+            console.warn('Entry is not a landing page, got:', entry.sys.contentType.sys.id);
             return null;
         }
 
         return entry;
     } catch (error) {
-        console.error('Error fetching landing page by ID:', error);
-        throw error;
+        console.error('Error fetching landing page by ID:', entryId, error);
+        // Return null instead of throwing to prevent 500 errors
+        return null;
     }
 };
 

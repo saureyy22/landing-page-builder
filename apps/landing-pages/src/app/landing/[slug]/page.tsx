@@ -151,17 +151,33 @@ export default async function LandingPage({ params, searchParams }: LandingPageP
   try {
     let landingPage;
 
+    console.log('Landing page request - slug:', params.slug, 'entryId:', searchParams?.entryId);
+
     // Check if this is a preview request with entryId
     if (searchParams?.entryId) {
       console.log('Preview mode: fetching by entryId', searchParams.entryId);
-      landingPage = await getLandingPageById(searchParams.entryId, true);
+      try {
+        landingPage = await getLandingPageById(searchParams.entryId, true);
+        console.log('Preview fetch result:', landingPage ? 'success' : 'not found');
+      } catch (error) {
+        console.error('Preview fetch failed:', error);
+        landingPage = null;
+      }
     } else {
       // Normal mode: fetch by slug
-      landingPage = await getLandingPageBySlug(params.slug);
+      console.log('Normal mode: fetching by slug', params.slug);
+      try {
+        landingPage = await getLandingPageBySlug(params.slug);
+        console.log('Slug fetch result:', landingPage ? 'success' : 'not found');
+      } catch (error) {
+        console.error('Slug fetch failed:', error);
+        landingPage = null;
+      }
     }
 
     // Fallback to mock data if Contentful is not configured
     if (!landingPage && (params.slug === 'page-1' || params.slug === 'page-2')) {
+      console.log('Using mock data for slug:', params.slug);
       landingPage = getMockLandingPageBySlug(params.slug);
     }
 
