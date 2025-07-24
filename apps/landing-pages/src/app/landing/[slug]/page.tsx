@@ -11,7 +11,7 @@ interface LandingPageProps {
   params: {
     slug: string;
   };
-  searchParams: {
+  searchParams?: {
     entryId?: string;
     t?: string;
   };
@@ -35,15 +35,22 @@ export async function generateStaticParams() {
 }
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: LandingPageProps): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: LandingPageProps): Promise<Metadata> {
   try {
-    let landingPage = await getLandingPageBySlug(params.slug);
-    
+    let landingPage;
+
+    // Check if this is a preview request with entryId
+    if (searchParams?.entryId) {
+      landingPage = await getLandingPageById(searchParams.entryId, true);
+    } else {
+      landingPage = await getLandingPageBySlug(params.slug);
+    }
+
     // Fallback to mock data if Contentful is not configured
     if (!landingPage && (params.slug === 'page-1' || params.slug === 'page-2')) {
       landingPage = getMockLandingPageBySlug(params.slug);
     }
-    
+
     if (!landingPage) {
       return {
         title: 'Page Not Found',
@@ -52,18 +59,18 @@ export async function generateMetadata({ params }: LandingPageProps): Promise<Me
     }
 
     const { seoTitle, seoDescription, title, layoutConfig } = landingPage.fields;
-    
+
     // Extract hero image for social media sharing if available
     const typedLayoutConfig = layoutConfig as unknown as LayoutConfig;
     const heroComponent = typedLayoutConfig?.components?.find((comp: any) => comp.type === 'hero-block');
-    const heroImage = heroComponent && heroComponent.type === 'hero-block' 
-      ? (heroComponent.data as any)?.backgroundImage?.fields?.file?.url 
+    const heroImage = heroComponent && heroComponent.type === 'hero-block'
+      ? (heroComponent.data as any)?.backgroundImage?.fields?.file?.url
       : undefined;
     const imageUrl = heroImage ? `https:${heroImage}` : undefined;
-    
+
     // Generate canonical URL
     const canonicalUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'}/landing/${params.slug}`;
-    
+
     const metaTitle = String(seoTitle || title || 'Landing Page');
     const metaDescription = String(seoDescription || 'Dynamic landing page built with Contentful');
 
@@ -143,9 +150,9 @@ export async function generateMetadata({ params }: LandingPageProps): Promise<Me
 export default async function LandingPage({ params, searchParams }: LandingPageProps) {
   try {
     let landingPage;
-    
+
     // Check if this is a preview request with entryId
-    if (searchParams.entryId) {
+    if (searchParams?.entryId) {
       console.log('Preview mode: fetching by entryId', searchParams.entryId);
       landingPage = await getLandingPageById(searchParams.entryId, true);
     } else {
@@ -159,7 +166,7 @@ export default async function LandingPage({ params, searchParams }: LandingPageP
     }
 
     if (!landingPage) {
-      console.log('Landing page not found for slug:', params.slug, 'entryId:', searchParams.entryId);
+      console.log('Landing page not found for slug:', params.slug, 'entryId:', searchParams?.entryId);
       notFound();
     }
 
