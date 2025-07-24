@@ -33,8 +33,8 @@ function sendToAnalytics(metric: PerformanceMetric) {
   }
   
   // Example: Send to Google Analytics 4
-  if (typeof gtag !== 'undefined') {
-    gtag('event', metric.name, {
+  if (typeof window !== 'undefined' && (window as any).gtag) {
+    (window as any).gtag('event', metric.name, {
       custom_parameter_1: metric.value,
       custom_parameter_2: metric.rating,
     });
