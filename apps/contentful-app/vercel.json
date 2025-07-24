@@ -29,7 +29,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self' https://app.contentful.com https://api.contentful.com https://images.ctfassets.net; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://images.ctfassets.net https://picsum.photos https://placehold.co https://fastly.picsum.photos https://placeholder.com https://dummyimage.com; connect-src 'self' https://api.contentful.com https://app.contentful.com https://landing-page-builder-landing-pages.vercel.app;"
+          "value": "default-src 'self' https://app.contentful.com https://api.contentful.com https://images.ctfassets.net; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://images.ctfassets.net https://picsum.photos https://placehold.co https://fastly.picsum.photos https://placeholder.com https://dummyimage.com; connect-src 'self' https://api.contentful.com https://app.contentful.com https://YOUR_LANDING_PAGES_DOMAIN.vercel.app;"
         }
       ]
     },

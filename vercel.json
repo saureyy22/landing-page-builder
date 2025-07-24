@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "apps/landing-pages/package.json",
+      "use": "@vercel/next"
+    },
+    {
+      "src": "apps/contentful-app/package.json", 
+      "use": "@vercel/static-build",
+      "config": {
+        "buildCommand": "cd apps/contentful-app && npm run build",
+        "outputDirectory": "apps/contentful-app/dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/contentful-app/(.*)",
+      "dest": "/apps/contentful-app/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/apps/landing-pages/$1"
+    }
+  ]
+}
