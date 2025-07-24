@@ -27,7 +27,7 @@ const TestControls: React.FC = () => {
           fields: {
             title: 'Test Image',
             file: {
-              url: 'https://via.placeholder.com/800x400',
+              url: 'https://placehold.co/800x400/3b82f6/ffffff?text=Test+Hero+Image',
               details: { size: 0, image: { width: 800, height: 400 } },
               fileName: 'test.jpg',
               contentType: 'image/jpeg',
@@ -70,7 +70,7 @@ const TestControls: React.FC = () => {
                 fields: {
                   title: 'Test Image',
                   file: {
-                    url: 'https://via.placeholder.com/400x300',
+                    url: 'https://placehold.co/400x300/6366f1/ffffff?text=Test+Column+Image',
                     details: { size: 0, image: { width: 400, height: 300 } },
                     fileName: 'test.jpg',
                     contentType: 'image/jpeg',

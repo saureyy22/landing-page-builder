@@ -28,7 +28,7 @@ export const BuilderCanvas: React.FC = () => {
             fields: {
               title: 'Placeholder Image',
               file: {
-                url: 'https://picsum.photos/1200/600',
+                url: 'https://placehold.co/1200x600/3b82f6/ffffff?text=Hero+Background',
                 details: { size: 0, image: { width: 1200, height: 600 } },
                 fileName: 'placeholder.jpg',
                 contentType: 'image/jpeg',
@@ -49,7 +49,7 @@ export const BuilderCanvas: React.FC = () => {
               fields: {
                 title: 'Placeholder Image',
                 file: {
-                  url: 'https://picsum.photos/600/400',
+                  url: 'https://placehold.co/600x400/6366f1/ffffff?text=Column+Image',
                   details: { size: 0, image: { width: 600, height: 400 } },
                   fileName: 'placeholder.jpg',
                   contentType: 'image/jpeg',
@@ -66,7 +66,7 @@ export const BuilderCanvas: React.FC = () => {
               fields: {
                 title: 'Grid Image 1',
                 file: {
-                  url: 'https://picsum.photos/300/300?random=1',
+                  url: 'https://placehold.co/300x300/3b82f6/ffffff?text=Grid+1',
                   details: { size: 0, image: { width: 300, height: 300 } },
                   fileName: 'placeholder-1.jpg',
                   contentType: 'image/jpeg',
@@ -78,7 +78,7 @@ export const BuilderCanvas: React.FC = () => {
               fields: {
                 title: 'Grid Image 2',
                 file: {
-                  url: 'https://picsum.photos/300/300?random=2',
+                  url: 'https://placehold.co/300x300/6366f1/ffffff?text=Grid+2',
                   details: { size: 0, image: { width: 300, height: 300 } },
                   fileName: 'placeholder-2.jpg',
                   contentType: 'image/jpeg',
@@ -90,7 +90,7 @@ export const BuilderCanvas: React.FC = () => {
               fields: {
                 title: 'Grid Image 3',
                 file: {
-                  url: 'https://picsum.photos/300/300?random=3',
+                  url: 'https://placehold.co/300x300/8b5cf6/ffffff?text=Grid+3',
                   details: { size: 0, image: { width: 300, height: 300 } },
                   fileName: 'placeholder-3.jpg',
                   contentType: 'image/jpeg',
@@ -102,7 +102,7 @@ export const BuilderCanvas: React.FC = () => {
               fields: {
                 title: 'Grid Image 4',
                 file: {
-                  url: 'https://picsum.photos/300/300?random=4',
+                  url: 'https://placehold.co/300x300/06b6d4/ffffff?text=Grid+4',
                   details: { size: 0, image: { width: 300, height: 300 } },
                   fileName: 'placeholder-4.jpg',
                   contentType: 'image/jpeg',

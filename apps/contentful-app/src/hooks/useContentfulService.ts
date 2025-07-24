@@ -167,33 +167,28 @@ export const useContentfulAppContext = () => {
     // For now, we'll check URL parameters or use a default
     const getEntryIdFromContext = () => {
       try {
-        // Check URL parameters first
+        // Check URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const urlEntryId = urlParams.get('entryId');
         
         if (urlEntryId) {
-          console.log('Using entry ID from URL:', urlEntryId);
           return urlEntryId;
         }
 
         // Check if running in Contentful App context
         // In a real app, you would use: window.contentfulExtension?.entry?.getSys().id
         
-        // For development, check localStorage first
+        // For development, use a default entry ID or get from localStorage
         const storedEntryId = localStorage.getItem('contentful-entry-id');
         if (storedEntryId) {
-          console.log('Using stored entry ID:', storedEntryId);
           return storedEntryId;
         }
 
-        // For development mode, create a mock entry ID that works with preview
-        const developmentEntryId = 'dev-entry-' + Date.now();
-        console.log('Created development entry ID:', developmentEntryId);
-        return developmentEntryId;
+        // For development, use a real entry ID from your Contentful space
+        return '5XJxE72OSkHuGGCCHvGUAL';
       } catch (error) {
         console.error('Error getting entry ID from context:', error);
-        // Return a fallback development entry ID
-        return 'dev-fallback-entry';
+        return null;
       }
     };
 
@@ -213,7 +208,6 @@ export const useContentfulAppContext = () => {
     setEntryId: (newEntryId: string) => {
       setEntryId(newEntryId);
       localStorage.setItem('contentful-entry-id', newEntryId);
-      console.log('Set new entry ID:', newEntryId);
     },
   };
 };

@@ -22,7 +22,7 @@ export class PreviewService {
       deploymentStatus: 'unknown',
     };
     
-    console.log('Preview service initialized with base URL:', this.config.baseUrl);
+    // Preview service initialized
   }
 
   // Check if the preview deployment is available
