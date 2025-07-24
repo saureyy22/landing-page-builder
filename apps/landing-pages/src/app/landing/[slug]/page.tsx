@@ -39,16 +39,34 @@ export async function generateMetadata({ params, searchParams }: LandingPageProp
   try {
     let landingPage;
 
-    // Check if this is a preview request with entryId
-    if (searchParams?.entryId) {
-      landingPage = await getLandingPageById(searchParams.entryId, true);
-    } else {
-      landingPage = await getLandingPageBySlug(params.slug);
-    }
+    // Check if Contentful is configured
+    const isContentfulConfigured = process.env.CONTENTFUL_SPACE_ID && process.env.CONTENTFUL_ACCESS_TOKEN;
 
-    // Fallback to mock data if Contentful is not configured
-    if (!landingPage && (params.slug === 'page-1' || params.slug === 'page-2')) {
+    if (!isContentfulConfigured) {
+      // Use mock data when Contentful is not configured
       landingPage = getMockLandingPageBySlug(params.slug);
+    } else {
+      // Check if this is a preview request with entryId
+      if (searchParams?.entryId) {
+        try {
+          landingPage = await getLandingPageById(searchParams.entryId, true);
+        } catch (error) {
+          console.error('Preview metadata fetch failed:', error);
+          landingPage = null;
+        }
+      } else {
+        try {
+          landingPage = await getLandingPageBySlug(params.slug);
+        } catch (error) {
+          console.error('Slug metadata fetch failed:', error);
+          landingPage = null;
+        }
+      }
+
+      // Fallback to mock data if Contentful fetch failed or entry not found
+      if (!landingPage) {
+        landingPage = getMockLandingPageBySlug(params.slug);
+      }
     }
 
     if (!landingPage) {
@@ -188,8 +206,8 @@ export default async function LandingPage({ params, searchParams }: LandingPageP
         }
       }
 
-      // Fallback to mock data if Contentful fetch failed
-      if (!landingPage && (params.slug === 'page-1' || params.slug === 'page-2')) {
+      // Fallback to mock data if Contentful fetch failed or entry not found
+      if (!landingPage) {
         console.log('Using mock data fallback for slug:', params.slug);
         landingPage = getMockLandingPageBySlug(params.slug);
       }
