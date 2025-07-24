@@ -76,7 +76,12 @@ export async function generateMetadata({ params, searchParams }: LandingPageProp
       };
     }
 
-    const { seoTitle, seoDescription, title, layoutConfig } = landingPage.fields;
+    // Safely extract fields with fallbacks
+    const fields = landingPage.fields || {};
+    const seoTitle = fields.seoTitle;
+    const seoDescription = fields.seoDescription;
+    const title = fields.title || `Landing Page - ${params.slug}`;
+    const layoutConfig = fields.layoutConfig;
 
     // Extract hero image for social media sharing if available
     const typedLayoutConfig = layoutConfig as unknown as LayoutConfig;
@@ -218,17 +223,21 @@ export default async function LandingPage({ params, searchParams }: LandingPageP
       notFound();
     }
 
-    console.log('Landing page data:', JSON.stringify(landingPage, null, 2));
-
     // Safely extract fields with fallbacks
     const fields = landingPage.fields || {};
+    console.log('Fields available:', Object.keys(fields));
+
     const title = fields.title || `Landing Page - ${params.slug}`;
     let layoutConfig = fields.layoutConfig;
+
+    console.log('Raw layoutConfig type:', typeof layoutConfig);
+    console.log('Raw layoutConfig preview:', layoutConfig ? String(layoutConfig).substring(0, 200) : 'null');
 
     // Handle case where layoutConfig might be a string that needs parsing
     if (typeof layoutConfig === 'string') {
       try {
         layoutConfig = JSON.parse(layoutConfig);
+        console.log('Successfully parsed layoutConfig from string');
       } catch (error) {
         console.error('Failed to parse layoutConfig:', error);
         layoutConfig = { components: [], version: '1.0.0' };
@@ -241,7 +250,7 @@ export default async function LandingPage({ params, searchParams }: LandingPageP
       layoutConfig = { components: [], version: '1.0.0' };
     }
 
-    console.log('Processed layoutConfig:', JSON.stringify(layoutConfig, null, 2));
+    console.log('Final layoutConfig has', layoutConfig.components?.length || 0, 'components');
 
     return (
       <>
