@@ -17,11 +17,8 @@ interface LandingPageProps {
   };
 }
 
-// Generate static params for SSG - simplified to prevent errors
-export async function generateStaticParams() {
-  // Return empty array to allow all dynamic routes
-  return [];
-}
+// Force dynamic rendering to prevent DYNAMIC_SERVER_USAGE errors
+export const dynamic = 'force-dynamic';
 
 // Simplified metadata generation to prevent DYNAMIC_SERVER_USAGE errors
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
