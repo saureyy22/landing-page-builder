@@ -206,6 +206,75 @@ export const entryExists = async (entryId: string): Promise<boolean> => {
   }
 };
 
+// Helper function to create a new landing page entry
+export const createLandingPageEntry = async (
+  entryId: string,
+  initialData: {
+    title?: string;
+    slug?: string;
+    layoutConfig?: LayoutConfig;
+  } = {}
+): Promise<any> => {
+  try {
+    const { environment } = await getSpaceEnvironment();
+
+    // Create entry with basic structure
+    const entry = await environment.createEntryWithId('landingPage', entryId, {
+      fields: {
+        title: {
+          'en-US': initialData.title || `Landing Page ${entryId}`
+        },
+        slug: {
+          'en-US': initialData.slug || entryId
+        },
+        layoutConfig: {
+          'en-US': initialData.layoutConfig || {
+            components: [],
+            lastModified: new Date().toISOString()
+          }
+        }
+      }
+    });
+
+    // Publish the entry
+    const publishedEntry = await entry.publish();
+    return publishedEntry;
+  } catch (error: any) {
+    console.error('Error creating landing page entry:', error);
+
+    if (error.status === 422) {
+      throw new ContentfulAPIError('Invalid data provided for landing page creation');
+    }
+    if (error.status === 409) {
+      throw new ContentfulAPIError('Entry with this ID already exists');
+    }
+
+    throw new ContentfulAPIError('Failed to create landing page entry', error);
+  }
+};
+
+// Helper function to get or create landing page entry
+export const getOrCreateLandingPageEntry = async (
+  entryId: string,
+  initialData?: {
+    title?: string;
+    slug?: string;
+    layoutConfig?: LayoutConfig;
+  }
+): Promise<any> => {
+  try {
+    // Try to get existing entry first
+    return await getLandingPageEntry(entryId);
+  } catch (error) {
+    if (error instanceof ContentfulAPIError && error.message.includes('not found')) {
+      // Entry doesn't exist, create it
+      console.log(`Entry ${entryId} not found, creating new entry...`);
+      return await createLandingPageEntry(entryId, initialData);
+    }
+    throw error;
+  }
+};
+
 // Helper function to get current entry version (for conflict detection)
 export const getEntryVersion = async (entryId: string): Promise<number> => {
   try {

@@ -142,27 +142,48 @@ const PreviewButton: React.FC<PreviewButtonProps> = ({ className }) => {
       await new Promise(resolve => setTimeout(resolve, 200));
 
       // Open preview using the preview service helper
-      const previewWindow = openPreviewWindow(previewUrl);
+      try {
+        const previewWindow = openPreviewWindow(previewUrl);
 
-      if (!previewWindow) {
-        alert('Preview blocked by popup blocker. Please allow popups for this site and try again.');
+        // Show informational message about preview state
+        if (hasUnsavedChanges) {
+          setTimeout(() => {
+            console.log('Preview opened with last saved version. Your current changes are not reflected in the preview.');
+          }, 300);
+        } else {
+          console.log('Preview opened with current saved version');
+        }
+
+        // Show deployment status message if unknown
+        if (deploymentStatus === 'unknown') {
+          setTimeout(() => {
+            console.warn(previewService.getDeploymentStatusMessage());
+          }, 500);
+        }
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+
+        if (errorMessage.includes('popup blocker')) {
+          // Provide fallback option to copy URL
+          const shouldCopyUrl = window.confirm(
+            'Preview was blocked by popup blocker.\n\n' +
+            'Click "OK" to copy the preview URL to your clipboard, or "Cancel" to try again.\n\n' +
+            'To avoid this in the future, please allow popups for this site.'
+          );
+
+          if (shouldCopyUrl) {
+            try {
+              navigator.clipboard.writeText(previewUrl);
+              alert('Preview URL copied to clipboard! You can paste it in a new tab.');
+            } catch (clipboardError) {
+              // Fallback for older browsers
+              prompt('Copy this URL to preview your page:', previewUrl);
+            }
+          }
+        } else {
+          alert('Failed to open preview. Please try again.');
+        }
         return;
-      }
-
-      // Show informational message about preview state
-      if (hasUnsavedChanges) {
-        setTimeout(() => {
-          alert('Preview opened with last saved version. Your current changes are not reflected in the preview.');
-        }, 300);
-      } else {
-        console.log('Preview opened with current saved version');
-      }
-
-      // Show deployment status message if unknown
-      if (deploymentStatus === 'unknown') {
-        setTimeout(() => {
-          console.warn(previewService.getDeploymentStatusMessage());
-        }, 500);
       }
     } catch (error) {
       console.error('Failed to generate preview:', error);

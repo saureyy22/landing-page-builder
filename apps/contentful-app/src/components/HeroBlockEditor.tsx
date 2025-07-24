@@ -15,7 +15,7 @@ interface HeroBlockEditorProps {
  */
 export const HeroBlockEditor: React.FC<HeroBlockEditorProps> = ({ componentId }) => {
   const dispatch = useAppDispatch();
-  const component = useAppSelector((state) => 
+  const component = useAppSelector((state) =>
     state.layout.components.find(c => c.id === componentId)
   );
 
@@ -25,6 +25,18 @@ export const HeroBlockEditor: React.FC<HeroBlockEditorProps> = ({ componentId })
   useEffect(() => {
     if (component && component.type === 'hero-block') {
       setLocalData(component.data as HeroBlockData);
+    } else if (component && component.type === 'hero-block' && !component.data) {
+      // Initialize with default data if component exists but has no data
+      const defaultData: HeroBlockData = {
+        heading: 'Welcome to Our Landing Page',
+        subtitle: 'Create amazing experiences with our platform',
+        cta: {
+          text: 'Get Started',
+          url: '#'
+        },
+        backgroundImage: null
+      };
+      setLocalData(defaultData);
     }
   }, [component]);
 
@@ -41,7 +53,7 @@ export const HeroBlockEditor: React.FC<HeroBlockEditorProps> = ({ componentId })
 
   const handleFieldChange = (field: keyof HeroBlockData, value: any) => {
     if (!localData) return;
-    
+
     setLocalData({
       ...localData,
       [field]: value,
@@ -50,7 +62,7 @@ export const HeroBlockEditor: React.FC<HeroBlockEditorProps> = ({ componentId })
 
   const handleCTAChange = (field: 'text' | 'url', value: string) => {
     if (!localData) return;
-    
+
     setLocalData({
       ...localData,
       cta: {
@@ -77,7 +89,7 @@ export const HeroBlockEditor: React.FC<HeroBlockEditorProps> = ({ componentId })
           },
         },
       };
-      
+
       handleFieldChange('backgroundImage', newAsset);
     }
   };
@@ -148,20 +160,26 @@ export const HeroBlockEditor: React.FC<HeroBlockEditorProps> = ({ componentId })
         <div className="form-group">
           <label>Background Image</label>
           <div className="image-selector">
-            <div className="current-image">
-              <img 
-                src={localData.backgroundImage.fields.file.url} 
-                alt={localData.backgroundImage.fields.title}
-                className="image-preview"
-              />
-              <div className="image-info">
-                <span className="image-title">{localData.backgroundImage.fields.title}</span>
-                <span className="image-dimensions">
-                  {localData.backgroundImage.fields.file.details.image?.width} × {localData.backgroundImage.fields.file.details.image?.height}
-                </span>
+            {localData.backgroundImage ? (
+              <div className="current-image">
+                <img
+                  src={localData.backgroundImage.fields.file.url}
+                  alt={localData.backgroundImage.fields.title}
+                  className="image-preview"
+                />
+                <div className="image-info">
+                  <span className="image-title">{localData.backgroundImage.fields.title}</span>
+                  <span className="image-dimensions">
+                    {localData.backgroundImage.fields.file.details.image?.width} × {localData.backgroundImage.fields.file.details.image?.height}
+                  </span>
+                </div>
               </div>
-            </div>
-            <button 
+            ) : (
+              <div className="no-image">
+                <span>No background image selected</span>
+              </div>
+            )}
+            <button
               type="button"
               onClick={handleImageSelect}
               className="select-image-button"
@@ -180,12 +198,14 @@ export const HeroBlockEditor: React.FC<HeroBlockEditorProps> = ({ componentId })
             <p>{localData.subtitle}</p>
             <button className="preview-cta-button">{localData.cta.text}</button>
           </div>
-          <div className="hero-preview-background">
-            <img 
-              src={localData.backgroundImage.fields.file.url} 
-              alt={localData.backgroundImage.fields.title}
-            />
-          </div>
+          {localData.backgroundImage && (
+            <div className="hero-preview-background">
+              <img
+                src={localData.backgroundImage.fields.file.url}
+                alt={localData.backgroundImage.fields.title}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

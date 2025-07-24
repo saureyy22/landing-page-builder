@@ -16,13 +16,22 @@ export class PreviewService {
   private config: PreviewConfig;
 
   constructor() {
+    // Use import.meta.env for Vite-based apps
+    const previewUrl = import.meta.env.REACT_APP_PREVIEW_URL || 
+                      process.env.REACT_APP_PREVIEW_URL || 
+                      'https://landing-page-builder-landing-pages.vercel.app';
+    
+    const nodeEnv = import.meta.env.NODE_ENV || 
+                   process.env.NODE_ENV || 
+                   'development';
+
     this.config = {
-      baseUrl: process.env.REACT_APP_PREVIEW_URL || 'https://landing-page-builder-landing-pages.vercel.app',
-      isProduction: process.env.NODE_ENV === 'production',
+      baseUrl: previewUrl,
+      isProduction: nodeEnv === 'production',
       deploymentStatus: 'unknown',
     };
     
-    // Preview service initialized
+    console.log('Preview service initialized with URL:', this.config.baseUrl);
   }
 
   // Check if the preview deployment is available
@@ -109,20 +118,25 @@ export const previewService = new PreviewService();
 // Helper function to open preview with proper error handling
 export const openPreviewWindow = (url: string): Window | null => {
   try {
+    // Try to open the window
     const previewWindow = window.open(
       url,
-      '_blank',
-      'noopener,noreferrer,width=1200,height=800,scrollbars=yes,resizable=yes'
+      'contentful_preview',
+      'noopener,noreferrer,width=1200,height=800,scrollbars=yes,resizable=yes,toolbar=no,menubar=no'
     );
 
-    if (!previewWindow) {
+    // Check if window was blocked
+    if (!previewWindow || previewWindow.closed || typeof previewWindow.closed === 'undefined') {
       throw new Error('Preview window was blocked by popup blocker');
     }
+
+    // Focus the new window
+    previewWindow.focus();
 
     return previewWindow;
   } catch (error) {
     console.error('Failed to open preview window:', error);
-    return null;
+    throw error;
   }
 };
 

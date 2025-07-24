@@ -37,7 +37,7 @@ export interface HeroBlockData {
   heading: string;
   subtitle: string;
   cta: CTA;
-  backgroundImage: ContentfulAsset;
+  backgroundImage: ContentfulAsset | null;
 }
 
 /**

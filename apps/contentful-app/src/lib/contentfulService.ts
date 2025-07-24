@@ -1,7 +1,8 @@
 import { LayoutConfig } from '@contentful-landing-page-builder/shared';
 import { 
   updateLandingPageEntryWithRetry, 
-  getLandingPageEntry, 
+  getLandingPageEntry,
+  getOrCreateLandingPageEntry,
   validateAuthentication,
   ContentfulAPIError,
   ContentfulAuthError,
@@ -86,6 +87,16 @@ export class ContentfulService {
         }
       }
 
+      // Ensure entry exists before attempting to save
+      await getOrCreateLandingPageEntry(this.currentEntryId!, {
+        title: `Landing Page ${this.currentEntryId}`,
+        slug: this.currentEntryId!,
+        layoutConfig: {
+          components: [],
+          lastModified: new Date().toISOString()
+        }
+      });
+
       // Attempt to save with retry logic
       await updateLandingPageEntryWithRetry(this.currentEntryId!, layoutConfig);
 
@@ -147,7 +158,15 @@ export class ContentfulService {
         throw new ContentfulConfigError('Service not ready for loading');
       }
 
-      const entry = await getLandingPageEntry(this.currentEntryId!);
+      // Use getOrCreateLandingPageEntry to handle missing entries
+      const entry = await getOrCreateLandingPageEntry(this.currentEntryId!, {
+        title: `Landing Page ${this.currentEntryId}`,
+        slug: this.currentEntryId!,
+        layoutConfig: {
+          components: [],
+          lastModified: new Date().toISOString()
+        }
+      });
       return entry;
     } catch (error) {
       console.error('Failed to get entry data:', error);
