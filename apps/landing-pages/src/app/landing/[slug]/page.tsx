@@ -155,7 +155,7 @@ export default async function LandingPage({ params, searchParams }: LandingPageP
 
     // Check if Contentful is configured
     const isContentfulConfigured = process.env.CONTENTFUL_SPACE_ID && process.env.CONTENTFUL_ACCESS_TOKEN;
-    
+
     if (!isContentfulConfigured) {
       console.warn('Contentful not configured, using mock data');
       // Use mock data when Contentful is not configured
