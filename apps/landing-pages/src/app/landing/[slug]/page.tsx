@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getLandingPageBySlug, getLandingPageById, getAllLandingPageSlugs, getMockLandingPageBySlug } from '@/lib/contentful';
+import { getLandingPageBySlug, getLandingPageById, getAllLandingPageSlugs, getMockLandingPageBySlug, contentfulPreviewClient } from '@/lib/contentful';
 import { LayoutConfig } from '@contentful-landing-page-builder/shared';
 import LandingPageRenderer from '../../../components/LandingPageRenderer';
 import LandingPageLayout from '../../../components/LandingPageLayout';
@@ -53,16 +53,25 @@ export default async function LandingPage({ params, searchParams }: LandingPageP
       // Check if this is a preview request with entryId
       if (searchParams?.entryId) {
         console.log('Preview mode: fetching by entryId', searchParams.entryId);
+        console.log('Preview client available:', !!contentfulPreviewClient);
+        console.log('Environment variables check:', {
+          SPACE_ID: !!process.env.CONTENTFUL_SPACE_ID,
+          ACCESS_TOKEN: !!process.env.CONTENTFUL_ACCESS_TOKEN,
+          PREVIEW_TOKEN: !!process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN,
+          ENVIRONMENT: process.env.CONTENTFUL_ENVIRONMENT
+        });
+
         try {
           landingPage = await getLandingPageById(searchParams.entryId, true);
           if (landingPage) {
             dataSource = 'contentful (preview by ID)';
-            console.log('Preview fetch successful');
+            console.log('Preview fetch successful, entry sys:', landingPage.sys);
+            console.log('Preview fetch successful, content type:', landingPage.sys.contentType.sys.id);
           } else {
-            console.log('Preview fetch returned null');
+            console.log('Preview fetch returned null - entry may not exist or not be a landingPage');
           }
         } catch (error) {
-          console.error('Preview fetch failed:', error);
+          console.error('Preview fetch failed with error:', error);
           landingPage = null;
         }
       } else {
