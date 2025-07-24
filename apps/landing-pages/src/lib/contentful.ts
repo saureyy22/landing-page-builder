@@ -68,6 +68,31 @@ export const getLandingPageBySlug = async (slug: string, preview = false) => {
     }
 };
 
+// Helper function to get landing page by entry ID (for preview mode)
+export const getLandingPageById = async (entryId: string, preview = true) => {
+    try {
+        const client = preview && contentfulPreviewClient ? contentfulPreviewClient : contentfulClient;
+
+        if (!client) {
+            console.warn('Contentful client not configured, returning null');
+            return null;
+        }
+
+        const entry = await client.getEntry(entryId);
+        
+        // Verify it's a landing page content type
+        if (entry.sys.contentType.sys.id !== 'landingPage') {
+            console.warn('Entry is not a landing page');
+            return null;
+        }
+
+        return entry;
+    } catch (error) {
+        console.error('Error fetching landing page by ID:', error);
+        throw error;
+    }
+};
+
 // Helper function to get all landing page slugs for static generation
 export const getAllLandingPageSlugs = async () => {
     try {

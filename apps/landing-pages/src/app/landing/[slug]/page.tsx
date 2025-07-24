@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getLandingPageBySlug, getAllLandingPageSlugs, getMockLandingPageBySlug } from '@/lib/contentful';
+import { getLandingPageBySlug, getLandingPageById, getAllLandingPageSlugs, getMockLandingPageBySlug } from '@/lib/contentful';
 import { LayoutConfig } from '@contentful-landing-page-builder/shared';
 import LandingPageRenderer from '../../../components/LandingPageRenderer';
 import LandingPageLayout from '../../../components/LandingPageLayout';
@@ -10,6 +10,10 @@ import styles from './page.module.css';
 interface LandingPageProps {
   params: {
     slug: string;
+  };
+  searchParams: {
+    entryId?: string;
+    t?: string;
   };
 }
 
@@ -136,9 +140,18 @@ export async function generateMetadata({ params }: LandingPageProps): Promise<Me
   }
 }
 
-export default async function LandingPage({ params }: LandingPageProps) {
+export default async function LandingPage({ params, searchParams }: LandingPageProps) {
   try {
-    let landingPage = await getLandingPageBySlug(params.slug);
+    let landingPage;
+    
+    // Check if this is a preview request with entryId
+    if (searchParams.entryId) {
+      console.log('Preview mode: fetching by entryId', searchParams.entryId);
+      landingPage = await getLandingPageById(searchParams.entryId, true);
+    } else {
+      // Normal mode: fetch by slug
+      landingPage = await getLandingPageBySlug(params.slug);
+    }
 
     // Fallback to mock data if Contentful is not configured
     if (!landingPage && (params.slug === 'page-1' || params.slug === 'page-2')) {
@@ -146,6 +159,7 @@ export default async function LandingPage({ params }: LandingPageProps) {
     }
 
     if (!landingPage) {
+      console.log('Landing page not found for slug:', params.slug, 'entryId:', searchParams.entryId);
       notFound();
     }
 
