@@ -17,157 +17,25 @@ interface LandingPageProps {
   };
 }
 
-// Generate static params for SSG
+// Generate static params for SSG - simplified to prevent errors
 export async function generateStaticParams() {
-  try {
-    const slugs = await getAllLandingPageSlugs();
-    return slugs.map((slug: string) => ({
-      slug,
-    }));
-  } catch (error) {
-    console.error('Error generating static params, using mock data:', error);
-    // Return mock slugs for development
-    return [
-      { slug: 'page-1' },
-      { slug: 'page-2' },
-    ];
-  }
+  // Return empty array to allow all dynamic routes
+  return [];
 }
 
-// Generate metadata for SEO
-export async function generateMetadata({ params, searchParams }: LandingPageProps): Promise<Metadata> {
-  try {
-    let landingPage;
+// Simplified metadata generation to prevent DYNAMIC_SERVER_USAGE errors
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const title = `Landing Page - ${params.slug}`;
+  const description = 'Dynamic landing page built with Contentful';
 
-    // Check if Contentful is configured
-    const isContentfulConfigured = process.env.CONTENTFUL_SPACE_ID && process.env.CONTENTFUL_ACCESS_TOKEN;
-
-    if (!isContentfulConfigured) {
-      // Use mock data when Contentful is not configured
-      landingPage = getMockLandingPageBySlug(params.slug);
-    } else {
-      // Check if this is a preview request with entryId
-      if (searchParams?.entryId) {
-        try {
-          landingPage = await getLandingPageById(searchParams.entryId, true);
-        } catch (error) {
-          console.error('Preview metadata fetch failed:', error);
-          landingPage = null;
-        }
-      } else {
-        try {
-          landingPage = await getLandingPageBySlug(params.slug);
-        } catch (error) {
-          console.error('Slug metadata fetch failed:', error);
-          landingPage = null;
-        }
-      }
-
-      // Fallback to mock data if Contentful fetch failed or entry not found
-      if (!landingPage) {
-        landingPage = getMockLandingPageBySlug(params.slug);
-      }
-    }
-
-    if (!landingPage) {
-      return {
-        title: 'Page Not Found',
-        description: 'The requested landing page could not be found.',
-      };
-    }
-
-    // Safely extract fields with fallbacks
-    const fields = landingPage.fields || {};
-    const seoTitle = fields.seoTitle;
-    const seoDescription = fields.seoDescription;
-    const title = fields.title || `Landing Page - ${params.slug}`;
-    const layoutConfig = fields.layoutConfig;
-
-    // Extract hero image for social media sharing if available
-    const typedLayoutConfig = layoutConfig as unknown as LayoutConfig;
-    const heroComponent = typedLayoutConfig?.components?.find((comp: any) => comp.type === 'hero-block');
-    const heroImage = heroComponent && heroComponent.type === 'hero-block'
-      ? (heroComponent.data as any)?.backgroundImage?.fields?.file?.url
-      : undefined;
-    const imageUrl = heroImage ? `https:${heroImage}` : undefined;
-
-    // Generate canonical URL
-    const canonicalUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'}/landing/${params.slug}`;
-
-    const metaTitle = String(seoTitle || title || 'Landing Page');
-    const metaDescription = String(seoDescription || 'Dynamic landing page built with Contentful');
-
-    return {
-      title: metaTitle,
-      description: metaDescription,
-      keywords: ['landing page', 'contentful', 'dynamic content', 'marketing'],
-      authors: [{ name: 'Content Team' }],
-      creator: 'Landing Page Builder',
-      publisher: 'Landing Page Builder',
-      robots: {
-        index: true,
-        follow: true,
-        googleBot: {
-          index: true,
-          follow: true,
-          'max-video-preview': -1,
-          'max-image-preview': 'large',
-          'max-snippet': -1,
-        },
-      },
-      alternates: {
-        canonical: canonicalUrl,
-      },
-      openGraph: {
-        title: metaTitle,
-        description: metaDescription,
-        url: canonicalUrl,
-        siteName: 'Landing Page Builder',
-        type: 'website',
-        locale: 'en_US',
-        ...(imageUrl && {
-          images: [
-            {
-              url: imageUrl,
-              width: 1200,
-              height: 630,
-              alt: metaTitle,
-            },
-          ],
-        }),
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: metaTitle,
-        description: metaDescription,
-        creator: '@landingpagebuilder',
-        site: '@landingpagebuilder',
-        ...(imageUrl && {
-          images: [imageUrl],
-        }),
-      },
-      viewport: {
-        width: 'device-width',
-        initialScale: 1,
-        maximumScale: 1,
-      },
-      verification: {
-        google: process.env.GOOGLE_SITE_VERIFICATION,
-        yandex: process.env.YANDEX_VERIFICATION,
-        yahoo: process.env.YAHOO_SITE_VERIFICATION,
-      },
-    };
-  } catch (error) {
-    console.error('Error generating metadata, using fallback:', error);
-    return {
-      title: 'Landing Page',
-      description: 'Dynamic landing page built with Contentful',
-      robots: {
-        index: false,
-        follow: false,
-      },
-    };
-  }
+  return {
+    title,
+    description,
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
 }
 
 export default async function LandingPage({ params, searchParams }: LandingPageProps) {
