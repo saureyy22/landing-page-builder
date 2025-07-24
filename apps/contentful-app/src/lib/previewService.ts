@@ -21,43 +21,28 @@ export class PreviewService {
       isProduction: process.env.NODE_ENV === 'production',
       deploymentStatus: 'unknown',
     };
+    
+    console.log('Preview service initialized with base URL:', this.config.baseUrl);
   }
 
   // Check if the preview deployment is available
   async checkDeploymentStatus(): Promise<'available' | 'unavailable' | 'unknown'> {
     try {
-      // Try to fetch the health check endpoint or root page
-      const healthCheckUrl = `${this.config.baseUrl}/api/health`;
+      // Check the root URL since there's no health endpoint
       const rootUrl = this.config.baseUrl;
 
-      // First try health check endpoint
-      try {
-        const response = await fetch(healthCheckUrl, {
-          method: 'HEAD',
-          mode: 'no-cors',
-          signal: AbortSignal.timeout(5000), // 5 second timeout
-        });
-        this.config.deploymentStatus = 'available';
-        return 'available';
-      } catch (healthError) {
-        // If health check fails, try root URL
-        try {
-          const response = await fetch(rootUrl, {
-            method: 'HEAD',
-            mode: 'no-cors',
-            signal: AbortSignal.timeout(5000),
-          });
-          this.config.deploymentStatus = 'available';
-          return 'available';
-        } catch (rootError) {
-          this.config.deploymentStatus = 'unavailable';
-          return 'unavailable';
-        }
-      }
+      const response = await fetch(rootUrl, {
+        method: 'HEAD',
+        mode: 'no-cors',
+        signal: AbortSignal.timeout(5000), // 5 second timeout
+      });
+
+      this.config.deploymentStatus = 'available';
+      return 'available';
     } catch (error) {
       console.warn('Failed to check deployment status:', error);
-      this.config.deploymentStatus = 'unknown';
-      return 'unknown';
+      this.config.deploymentStatus = 'unavailable';
+      return 'unavailable';
     }
   }
 
@@ -65,31 +50,31 @@ export class PreviewService {
   generatePreviewUrl(options: PreviewOptions): string {
     const { slug, hasUnsavedChanges, entryId } = options;
     const previewUrl = `${this.config.baseUrl}/landing/${slug}`;
-    
+
     // Build query parameters
     const params = new URLSearchParams();
-    
+
     // Cache busting timestamp
     params.set('t', Date.now().toString());
-    
+
     // Preview mode indicators
     if (hasUnsavedChanges) {
       params.set('preview', 'unsaved');
     }
-    
+
     // Development mode indicator
     if (!this.config.isProduction) {
       params.set('dev', 'true');
     }
-    
+
     // Entry ID for debugging
     if (entryId) {
       params.set('entryId', entryId);
     }
-    
+
     // Deployment status for debugging
     params.set('deploymentStatus', this.config.deploymentStatus);
-    
+
     return `${previewUrl}?${params.toString()}`;
   }
 
@@ -129,11 +114,11 @@ export const openPreviewWindow = (url: string): Window | null => {
       '_blank',
       'noopener,noreferrer,width=1200,height=800,scrollbars=yes,resizable=yes'
     );
-    
+
     if (!previewWindow) {
       throw new Error('Preview window was blocked by popup blocker');
     }
-    
+
     return previewWindow;
   } catch (error) {
     console.error('Failed to open preview window:', error);

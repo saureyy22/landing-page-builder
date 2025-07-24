@@ -1,10 +1,10 @@
 .builder-canvas {
   flex: 1;
   min-height: 100%;
-  background: #f8f9fa;
+  background: #f8fafc;
   position: relative;
   overflow-y: auto;
-  padding: 20px;
+  padding: 24px;
 }
 
 .builder-canvas.empty {
@@ -18,41 +18,45 @@
 }
 
 .builder-canvas.can-drop {
-  border: 2px dashed #007bff;
+  border: 2px dashed #3b82f6;
   border-radius: 8px;
 }
 
 .canvas-empty-state {
   text-align: center;
-  color: #6c757d;
-  max-width: 400px;
+  color: #64748b;
+  max-width: 500px;
+  padding: 3rem 2rem;
 }
 
 .empty-state-icon {
   font-size: 4rem;
-  margin-bottom: 1rem;
-  opacity: 0.5;
+  margin-bottom: 1.5rem;
+  opacity: 0.6;
+  color: #94a3b8;
 }
 
 .canvas-empty-state h3 {
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 1rem 0;
   font-size: 1.5rem;
-  font-weight: 600;
-  color: #495057;
+  font-weight: 700;
+  color: #334155;
 }
 
 .canvas-empty-state p {
   margin: 0;
   font-size: 1rem;
-  line-height: 1.5;
+  line-height: 1.6;
+  color: #64748b;
 }
 
 .canvas-components {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  max-width: 800px;
+  gap: 20px;
+  max-width: 900px;
   margin: 0 auto;
+  padding: 0 20px;
 }
 
 .drop-indicator {
@@ -65,7 +69,7 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background: rgba(0, 123, 255, 0.1);
+  background: rgba(59, 130, 246, 0.1);
   border-radius: 8px;
   pointer-events: none;
   z-index: 10;
@@ -74,14 +78,14 @@
 .drop-indicator-line {
   width: 200px;
   height: 3px;
-  background: #007bff;
+  background: #3b82f6;
   border-radius: 2px;
   margin-bottom: 8px;
   animation: pulse 1.5s ease-in-out infinite;
 }
 
 .drop-indicator-text {
-  color: #007bff;
+  color: #3b82f6;
   font-weight: 600;
   font-size: 1.1rem;
 }

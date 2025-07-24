@@ -23,19 +23,12 @@ export class ContentfulAuthError extends Error {
   }
 }
 
-// Debug: Log all environment variables
-console.log('VITE_CONTENTFUL_SPACE_ID:', import.meta.env.VITE_CONTENTFUL_SPACE_ID);
-console.log('VITE_CONTENTFUL_MANAGEMENT_TOKEN:', import.meta.env.VITE_CONTENTFUL_MANAGEMENT_TOKEN);
-console.log('VITE_CONTENTFUL_ENVIRONMENT:', import.meta.env.VITE_CONTENTFUL_ENVIRONMENT);
-
 // Environment variables validation
 const requiredEnvVars = {
   spaceId: import.meta.env.VITE_CONTENTFUL_SPACE_ID,
   accessToken: import.meta.env.VITE_CONTENTFUL_MANAGEMENT_TOKEN,
   environment: import.meta.env.VITE_CONTENTFUL_ENVIRONMENT || 'master',
 };
-
-console.log('Required env vars:', requiredEnvVars);
 
 // Validate required environment variables
 Object.entries(requiredEnvVars).forEach(([key, value]) => {

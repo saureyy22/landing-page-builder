@@ -20,7 +20,7 @@ const THRESHOLDS = {
 function getRating(name: string, value: number): 'good' | 'needs-improvement' | 'poor' {
   const threshold = THRESHOLDS[name as keyof typeof THRESHOLDS];
   if (!threshold) return 'good';
-  
+
   if (value <= threshold.good) return 'good';
   if (value <= threshold.poor) return 'needs-improvement';
   return 'poor';
@@ -31,7 +31,7 @@ function sendToAnalytics(metric: PerformanceMetric) {
   if (process.env.NODE_ENV === 'development') {
     console.log('Performance Metric:', metric);
   }
-  
+
   // Example: Send to Google Analytics 4
   if (typeof window !== 'undefined' && (window as any).gtag) {
     (window as any).gtag('event', metric.name, {
@@ -39,7 +39,7 @@ function sendToAnalytics(metric: PerformanceMetric) {
       custom_parameter_2: metric.rating,
     });
   }
-  
+
   // Example: Send to Vercel Analytics
   if (typeof window !== 'undefined' && (window as any).va) {
     (window as any).va('track', 'Performance', {
@@ -115,7 +115,7 @@ export const PERFORMANCE_BUDGET = {
   maxBundleSize: 250,
   maxChunkSize: 150,
   maxAssetSize: 100,
-  
+
   // Performance metrics in ms (except CLS which is unitless)
   maxLCP: 2500,
   maxFID: 100,
@@ -129,27 +129,27 @@ export function checkPerformanceBudget(metrics: Record<string, number>): {
   violations: string[];
 } {
   const violations: string[] = [];
-  
+
   if (metrics.LCP > PERFORMANCE_BUDGET.maxLCP) {
     violations.push(`LCP (${metrics.LCP}ms) exceeds budget (${PERFORMANCE_BUDGET.maxLCP}ms)`);
   }
-  
+
   if (metrics.FID > PERFORMANCE_BUDGET.maxFID) {
     violations.push(`FID (${metrics.FID}ms) exceeds budget (${PERFORMANCE_BUDGET.maxFID}ms)`);
   }
-  
+
   if (metrics.CLS > PERFORMANCE_BUDGET.maxCLS) {
     violations.push(`CLS (${metrics.CLS}) exceeds budget (${PERFORMANCE_BUDGET.maxCLS})`);
   }
-  
+
   if (metrics.FCP > PERFORMANCE_BUDGET.maxFCP) {
     violations.push(`FCP (${metrics.FCP}ms) exceeds budget (${PERFORMANCE_BUDGET.maxFCP}ms)`);
   }
-  
+
   if (metrics.TTFB > PERFORMANCE_BUDGET.maxTTFB) {
     violations.push(`TTFB (${metrics.TTFB}ms) exceeds budget (${PERFORMANCE_BUDGET.maxTTFB}ms)`);
   }
-  
+
   return {
     passed: violations.length === 0,
     violations,

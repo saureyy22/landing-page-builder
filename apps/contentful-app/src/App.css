@@ -10,20 +10,21 @@
 }
 
 .app-header {
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   padding: 1rem 2rem;
-  border-bottom: 1px solid #e9ecef;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  min-height: 70px;
 }
 
 .app-header h1 {
   margin: 0;
-  color: #212529;
+  color: #1e293b;
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .header-controls {
@@ -64,6 +65,7 @@
   display: flex;
   height: 100%;
   background-color: #ffffff;
+  position: relative;
 }
 
 /* Fullscreen styles for Contentful App */
@@ -80,7 +82,7 @@ body {
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
-  margin-right: 400px; /* Make room for ComponentEditor */
+  position: relative;
 }
 
 .canvas-placeholder {
@@ -133,16 +135,15 @@ body {
 }
 
 .debug-panel {
-  position: fixed;
-  bottom: 20px;
-  right: 420px; /* Adjusted to not overlap with ComponentEditor */
+  margin-top: 20px;
   background: white;
   border: 1px solid #e9ecef;
   border-radius: 8px;
   padding: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  max-width: 300px;
-  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .debug-panel .debug-info {

@@ -29,33 +29,54 @@ const PreviewButton: React.FC<PreviewButtonProps> = ({ className }) => {
   const getEntrySlug = async (): Promise<string | null> => {
     try {
       const entryId = getCurrentEntryId();
-      if (!entryId) {
-        console.error('No entry ID available for preview');
-        return null;
-      }
-
-      // Try to fetch the actual slug from Contentful
-      try {
-        const entryData = await getEntryData();
-        const slug = entryData?.fields?.slug?.['en-US'];
-        if (slug) {
-          return slug;
+      
+      // Try to fetch the actual slug from Contentful if we have an entry ID
+      if (entryId) {
+        try {
+          const entryData = await getEntryData();
+          
+          // Try different possible slug field names
+          const possibleSlugFields = ['slug', 'pageSlug', 'urlSlug', 'path'];
+          
+          for (const fieldName of possibleSlugFields) {
+            const slug = entryData?.fields?.[fieldName]?.['en-US'];
+            if (slug && typeof slug === 'string') {
+              console.log(`Found slug "${slug}" in field "${fieldName}"`);
+              return slug;
+            }
+          }
+          
+          // Try to extract slug from title or name field as fallback
+          const title = entryData?.fields?.title?.['en-US'] || entryData?.fields?.name?.['en-US'];
+          if (title && typeof title === 'string') {
+            // Convert title to slug format
+            const slugFromTitle = title
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, '-')
+              .replace(/^-+|-+$/g, '');
+            
+            if (slugFromTitle) {
+              console.log(`Generated slug "${slugFromTitle}" from title "${title}"`);
+              return slugFromTitle;
+            }
+          }
+          
+          console.warn('No slug field found in entry, using entry ID as slug');
+          return entryId;
+        } catch (error) {
+          console.warn('Failed to fetch entry data from Contentful, using fallback:', error);
+          // Use entry ID as slug if we can't fetch data
+          return entryId;
         }
-      } catch (error) {
-        console.warn('Failed to fetch entry data from Contentful, using fallback:', error);
       }
 
-      // Fallback to default slug mapping based on entry ID
-      const slugMapping: Record<string, string> = {
-        'default-entry-id': 'page-1',
-        'page-1-entry-id': 'page-1',
-        'page-2-entry-id': 'page-2',
-      };
-
-      return slugMapping[entryId] || 'page-1';
+      // If no entry ID, use a default development slug
+      console.warn('No entry ID available, using default development slug');
+      return 'development-page';
     } catch (error) {
       console.error('Failed to get entry slug:', error);
-      return null;
+      // Final fallback
+      return 'default-page';
     }
   };
 
@@ -73,9 +94,12 @@ const PreviewButton: React.FC<PreviewButtonProps> = ({ className }) => {
       // Get the slug for the current entry
       const slug = await getEntrySlug();
       if (!slug) {
-        alert('Unable to generate preview: Could not determine page slug');
+        console.error('Could not determine page slug for preview');
+        alert('Unable to generate preview: Could not determine page slug. Please check your entry configuration.');
         return;
       }
+      
+      console.log('Using slug for preview:', slug);
 
       const entryId = getCurrentEntryId();
       let hasUnsavedChanges = isDirty;

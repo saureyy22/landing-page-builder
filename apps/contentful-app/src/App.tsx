@@ -24,7 +24,7 @@ const App: React.FC = () => {
 
   // Get entry ID from Contentful App context
   const { entryId, isLoading: contextLoading } = useContentfulAppContext();
-  
+
   // Initialize Contentful service
   const { status: serviceStatus, manualSave } = useContentfulService({
     entryId: entryId || undefined,
@@ -55,11 +55,11 @@ const App: React.FC = () => {
   // Show conflict dialog when there's a conflict error
   useEffect(() => {
     const isConflictError = saveError && (
-      saveError.includes('conflict') || 
+      saveError.includes('conflict') ||
       saveError.includes('version') ||
       saveError.includes('modified by another user')
     );
-    
+
     setShowConflictDialog(!!isConflictError);
   }, [saveError]);
 
@@ -86,15 +86,42 @@ const App: React.FC = () => {
                 <p>Can undo: {past.length > 0 ? 'Yes' : 'No'}</p>
                 <p>Can redo: {future.length > 0 ? 'Yes' : 'No'}</p>
                 <p>Selected: {selectedComponent || 'None'}</p>
+                <p>Entry ID: {entryId || 'Not set'}</p>
+                <div className="entry-id-controls">
+                  <input
+                    type="text"
+                    placeholder="Set Entry ID for testing"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        const input = e.target as HTMLInputElement;
+                        if (input.value.trim()) {
+                          localStorage.setItem('contentful-entry-id', input.value.trim());
+                          window.location.reload();
+                        }
+                      }
+                    }}
+                    style={{
+                      padding: '4px 8px',
+                      fontSize: '12px',
+                      border: '1px solid #e2e8f0',
+                      borderRadius: '4px',
+                      marginTop: '8px',
+                      width: '200px'
+                    }}
+                  />
+                  <p style={{ fontSize: '11px', color: '#64748b', margin: '4px 0 0 0' }}>
+                    Press Enter to set Entry ID
+                  </p>
+                </div>
               </div>
             </div>
           </div>
           <ComponentEditor />
         </div>
       </main>
-      
+
       {/* Save Conflict Dialog */}
-      <SaveConflictDialog 
+      <SaveConflictDialog
         isOpen={showConflictDialog}
         onClose={() => setShowConflictDialog(false)}
       />
