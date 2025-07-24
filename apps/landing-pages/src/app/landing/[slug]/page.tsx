@@ -218,7 +218,30 @@ export default async function LandingPage({ params, searchParams }: LandingPageP
       notFound();
     }
 
-    const { title, layoutConfig } = landingPage.fields;
+    console.log('Landing page data:', JSON.stringify(landingPage, null, 2));
+
+    // Safely extract fields with fallbacks
+    const fields = landingPage.fields || {};
+    const title = fields.title || `Landing Page - ${params.slug}`;
+    let layoutConfig = fields.layoutConfig;
+
+    // Handle case where layoutConfig might be a string that needs parsing
+    if (typeof layoutConfig === 'string') {
+      try {
+        layoutConfig = JSON.parse(layoutConfig);
+      } catch (error) {
+        console.error('Failed to parse layoutConfig:', error);
+        layoutConfig = { components: [], version: '1.0.0' };
+      }
+    }
+
+    // Ensure layoutConfig has the expected structure
+    if (!layoutConfig || !layoutConfig.components) {
+      console.warn('Invalid layoutConfig, using fallback');
+      layoutConfig = { components: [], version: '1.0.0' };
+    }
+
+    console.log('Processed layoutConfig:', JSON.stringify(layoutConfig, null, 2));
 
     return (
       <>
